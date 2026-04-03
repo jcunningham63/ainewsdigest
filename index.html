@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI News Digest — Daily AI News Podcast</title>
+  <meta name="description" content="Daily AI news podcast — researched, written, and narrated by AI. New episode every morning.">
+  <meta property="og:title" content="AI News Digest — Daily AI News Podcast">
+  <meta property="og:description" content="The podcast that covers AI... using AI. New episode every morning.">
+  <meta property="og:url" content="https://ainewsdigest.net">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --gold: #c8a96e;
+      --gold-dim: #8a7048;
+      --bg: #0f0f12;
+      --bg2: #16161a;
+      --bg3: #1e1e26;
+      --text: #e2dbd0;
+      --muted: #7a7068;
+      --border: #2c2c38;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 300;
+      line-height: 1.7;
+      overflow-x: hidden;
+    }
+
+    /* Grid background */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(var(--border) 1px, transparent 1px),
+        linear-gradient(90deg, var(--border) 1px, transparent 1px);
+      background-size: 64px 64px;
+      opacity: 0.4;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 0 24px;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Nav */
+    nav {
+      padding: 20px 0;
+      border-bottom: 1px solid var(--border);
+      position: relative;
+      z-index: 1;
+    }
+
+    nav .container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .nav-logo {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 20px;
+      letter-spacing: 0.12em;
+      color: var(--gold);
+      text-decoration: none;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 28px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 13px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover { color: var(--gold); }
+
+    /* Hero */
+    .hero {
+      padding: 80px 0 60px;
+      text-align: center;
+    }
+
+    .hero-label {
+      font-size: 11px;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+    }
+
+    .hero-label::before,
+    .hero-label::after {
+      content: '';
+      display: block;
+      width: 40px;
+      height: 1px;
+      background: var(--gold-dim);
+    }
+
+    .hero h1 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(52px, 10vw, 96px);
+      letter-spacing: 0.04em;
+      line-height: 0.95;
+      color: var(--text);
+      margin-bottom: 24px;
+    }
+
+    .hero h1 span { color: var(--gold); }
+
+    .hero-tagline {
+      font-size: 17px;
+      color: var(--muted);
+      max-width: 500px;
+      margin: 0 auto 48px;
+      letter-spacing: 0.02em;
+    }
+
+    /* Waveform decoration */
+    .waveform {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 3px;
+      margin-bottom: 48px;
+    }
+
+    .waveform-bar {
+      width: 3px;
+      background: var(--gold);
+      border-radius: 2px;
+      animation: wave 1.4s ease-in-out infinite;
+    }
+
+    .waveform-bar:nth-child(1)  { height: 12px; animation-delay: 0s;    opacity: 0.4; }
+    .waveform-bar:nth-child(2)  { height: 20px; animation-delay: 0.1s;  opacity: 0.6; }
+    .waveform-bar:nth-child(3)  { height: 32px; animation-delay: 0.2s;  opacity: 0.9; }
+    .waveform-bar:nth-child(4)  { height: 20px; animation-delay: 0.3s;  opacity: 0.7; }
+    .waveform-bar:nth-child(5)  { height: 40px; animation-delay: 0.15s; opacity: 1;   }
+    .waveform-bar:nth-child(6)  { height: 28px; animation-delay: 0.25s; opacity: 0.8; }
+    .waveform-bar:nth-child(7)  { height: 16px; animation-delay: 0.35s; opacity: 0.5; }
+    .waveform-bar:nth-child(8)  { height: 36px; animation-delay: 0.05s; opacity: 0.9; }
+    .waveform-bar:nth-child(9)  { height: 22px; animation-delay: 0.2s;  opacity: 0.6; }
+    .waveform-bar:nth-child(10) { height: 14px; animation-delay: 0.4s;  opacity: 0.4; }
+
+    @keyframes wave {
+      0%, 100% { transform: scaleY(1); }
+      50% { transform: scaleY(0.5); }
+    }
+
+    /* Player section */
+    .player-section {
+      padding: 0 0 80px;
+    }
+
+    .section-label {
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 16px;
+    }
+
+    .episode-card {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .episode-meta {
+      padding: 20px 24px 16px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .episode-date {
+      font-size: 11px;
+      letter-spacing: 0.1em;
+      color: var(--muted);
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+
+    .episode-title {
+      font-size: 18px;
+      font-weight: 500;
+      color: var(--text);
+      line-height: 1.3;
+    }
+
+    .episode-player {
+      background: var(--bg);
+    }
+
+    iframe.spreaker-player {
+      display: block;
+      width: 100%;
+      border: none;
+    }
+
+    .episode-footer {
+      padding: 14px 24px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .episode-desc {
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    .spreaker-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--gold);
+      text-decoration: none;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      border: 1px solid var(--gold-dim);
+      padding: 6px 14px;
+      border-radius: 2px;
+      transition: background 0.2s, color 0.2s;
+    }
+
+    .spreaker-link:hover {
+      background: var(--gold);
+      color: var(--bg);
+    }
+
+    /* Divider */
+    .divider {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin: 0;
+    }
+
+    /* About section */
+    .about-section {
+      padding: 80px 0;
+    }
+
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 48px;
+      align-items: start;
+    }
+
+    @media (max-width: 640px) {
+      .about-grid { grid-template-columns: 1fr; gap: 32px; }
+    }
+
+    .about-heading {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 42px;
+      letter-spacing: 0.04em;
+      line-height: 1;
+      color: var(--text);
+      margin-bottom: 20px;
+    }
+
+    .about-heading span { color: var(--gold); }
+
+    .about-body {
+      font-size: 15px;
+      color: var(--muted);
+      line-height: 1.8;
+    }
+
+    .about-stats {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .stat-item {
+      padding: 20px;
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--gold);
+      border-radius: 2px;
+    }
+
+    .stat-number {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 36px;
+      color: var(--gold);
+      letter-spacing: 0.04em;
+      line-height: 1;
+      margin-bottom: 4px;
+    }
+
+    .stat-label {
+      font-size: 12px;
+      color: var(--muted);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    /* Platforms */
+    .platforms-section {
+      padding: 80px 0;
+    }
+
+    .platforms-heading {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 36px;
+      letter-spacing: 0.06em;
+      color: var(--text);
+      margin-bottom: 32px;
+      text-align: center;
+    }
+
+    .platforms-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 12px;
+    }
+
+    .platform-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 16px 12px;
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 3px;
+      text-decoration: none;
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 500;
+      letter-spacing: 0.04em;
+      transition: border-color 0.2s, color 0.2s, background 0.2s;
+      text-align: center;
+    }
+
+    .platform-btn:hover {
+      border-color: var(--gold);
+      color: var(--gold);
+      background: var(--bg3);
+    }
+
+    /* Social */
+    .social-section {
+      padding: 60px 0;
+      text-align: center;
+      border-top: 1px solid var(--border);
+    }
+
+    .social-heading {
+      font-size: 13px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 20px;
+    }
+
+    .social-links {
+      display: flex;
+      justify-content: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .social-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 20px;
+      border: 1px solid var(--border);
+      border-radius: 2px;
+      text-decoration: none;
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 500;
+      letter-spacing: 0.06em;
+      transition: border-color 0.2s, color 0.2s;
+    }
+
+    .social-btn:hover {
+      border-color: var(--gold);
+      color: var(--gold);
+    }
+
+    /* Footer */
+    footer {
+      padding: 32px 0;
+      border-top: 1px solid var(--border);
+    }
+
+    footer .container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .footer-logo {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 16px;
+      letter-spacing: 0.12em;
+      color: var(--gold-dim);
+    }
+
+    .footer-text {
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    /* Fade in animation */
+    .fade-in {
+      opacity: 0;
+      transform: translateY(16px);
+      animation: fadeIn 0.7s ease forwards;
+    }
+
+    .fade-in:nth-child(1) { animation-delay: 0.1s; }
+    .fade-in:nth-child(2) { animation-delay: 0.25s; }
+    .fade-in:nth-child(3) { animation-delay: 0.4s; }
+    .fade-in:nth-child(4) { animation-delay: 0.55s; }
+
+    @keyframes fadeIn {
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <div class="container">
+      <a href="/" class="nav-logo">AI News Digest</a>
+      <ul class="nav-links">
+        <li><a href="#listen">Listen</a></li>
+        <li><a href="#about">About</a></li>
+        <li><a href="https://x.com/AiNewsDigestPod" target="_blank">X / Twitter</a></li>
+        <li><a href="https://www.linkedin.com/company/ai-news-digest-daily" target="_blank">LinkedIn</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <section class="hero">
+    <div class="container">
+      <div class="hero-label fade-in">Daily · AI · News · Podcast</div>
+      <h1 class="fade-in">AI <span>News</span><br>Digest</h1>
+      <p class="hero-tagline fade-in">The podcast that covers AI... using AI. New episode every morning.</p>
+      <div class="waveform fade-in">
+        <div class="waveform-bar"></div>
+        <div class="waveform-bar"></div>
+        <div class="waveform-bar"></div>
+        <div class="waveform-bar"></div>
+        <div class="waveform-bar"></div>
+        <div class="waveform-bar"></div>
+        <div class="waveform-bar"></div>
+        <div class="waveform-bar"></div>
+        <div class="waveform-bar"></div>
+        <div class="waveform-bar"></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="player-section" id="listen">
+    <div class="container">
+      <div class="section-label">Latest Episode</div>
+      <div class="episode-card">
+        <div class="episode-meta">
+          <div class="episode-date" id="ep-date">Loading...</div>
+          <div class="episode-title" id="ep-title">Loading latest episode...</div>
+        </div>
+        <div class="episode-player">
+          <iframe class="spreaker-player"
+            src="https://widget.spreaker.com/player?show_id=6791190&theme=dark&playlist=show&playlist-continuous=false&chapters-image=true&episode_id=&autoplay=false"
+            height="200"
+            allow="autoplay">
+          </iframe>
+        </div>
+        <div class="episode-footer">
+          <span class="episode-desc">Free to listen — no subscription required</span>
+          <a href="https://www.spreaker.com/podcast/ai-news-digest--6791190" target="_blank" class="spreaker-link">
+            All Episodes →
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <section class="about-section" id="about">
+    <div class="container">
+      <div class="about-grid">
+        <div>
+          <h2 class="about-heading">Built by <span>AI.</span><br>About AI.</h2>
+          <p class="about-body">
+            AI News Digest is different from every other AI podcast. It isn't a human-hosted show <em>about</em> AI — it's a show that <em>is</em> AI. Every episode is researched, written, and narrated entirely by artificial intelligence, making it a living demonstration of the technology it covers.
+            <br><br>
+            Each morning, AI scans the latest developments across tools, research, business, regulation, and industry shifts — then produces a concise, listenable digest ready before you start your day.
+          </p>
+        </div>
+        <div class="about-stats">
+          <div class="stat-item">
+            <div class="stat-number">Daily</div>
+            <div class="stat-label">New episode every morning</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-number">100%</div>
+            <div class="stat-label">AI researched, written & narrated</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-number">Free</div>
+            <div class="stat-label">Always free to listen</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <section class="platforms-section">
+    <div class="container">
+      <h2 class="platforms-heading">Listen Everywhere</h2>
+      <div class="platforms-grid">
+        <a href="https://www.spreaker.com/podcast/ai-news-digest--6791190" target="_blank" class="platform-btn">Spreaker</a>
+        <a href="https://podcasts.apple.com" target="_blank" class="platform-btn">Apple Podcasts</a>
+        <a href="https://open.spotify.com" target="_blank" class="platform-btn">Spotify</a>
+        <a href="https://www.iheart.com" target="_blank" class="platform-btn">iHeart</a>
+        <a href="https://www.pandora.com" target="_blank" class="platform-btn">Pandora</a>
+        <a href="https://www.spreaker.com/show/6791190/episodes/feed" target="_blank" class="platform-btn">RSS Feed</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="social-section">
+    <div class="container">
+      <p class="social-heading">Follow the show</p>
+      <div class="social-links">
+        <a href="https://x.com/AiNewsDigestPod" target="_blank" class="social-btn">X / Twitter @AiNewsDigestPod</a>
+        <a href="https://www.linkedin.com/company/ai-news-digest-daily" target="_blank" class="social-btn">LinkedIn — AI News Digest Daily</a>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="container">
+      <div class="footer-logo">AI News Digest</div>
+      <p class="footer-text">Daily AI news — researched, written & narrated by AI · ainewsdigest.net</p>
+    </div>
+  </footer>
+
+  <script>
+    // Pull latest episode title and date from Spreaker RSS feed
+    const RSS_URL = 'https://www.spreaker.com/show/6791190/episodes/feed';
+    const CORS_PROXY = 'https://api.allorigins.win/get?url=';
+
+    async function loadLatestEpisode() {
+      try {
+        const res = await fetch(CORS_PROXY + encodeURIComponent(RSS_URL));
+        const data = await res.json();
+        const parser = new DOMParser();
+        const xml = parser.parseFromString(data.contents, 'text/xml');
+        const item = xml.querySelector('item');
+        if (!item) return;
+
+        const title = item.querySelector('title')?.textContent || '';
+        const pubDate = item.querySelector('pubDate')?.textContent || '';
+        const link = item.querySelector('link')?.textContent || '';
+
+        document.getElementById('ep-title').textContent = title;
+
+        if (pubDate) {
+          const date = new Date(pubDate);
+          document.getElementById('ep-date').textContent = date.toLocaleDateString('en-US', {
+            weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
+          });
+        }
+
+        // Update the "Full Episode" link to the specific episode if available
+        const episodeLink = document.querySelector('.spreaker-link');
+        if (link && episodeLink) {
+          // Keep the all-episodes link as is — or update to specific episode
+        }
+      } catch (e) {
+        document.getElementById('ep-title').textContent = 'AI News Digest — Daily Episode';
+        document.getElementById('ep-date').textContent = 'New episode every morning';
+      }
+    }
+
+    loadLatestEpisode();
+  </script>
+
+</body>
+</html>
